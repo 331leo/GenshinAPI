@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
-from routes.v1 import v1_router, rate_limiter
+from routes.v1 import v1_router
+
 load_dotenv()
 
 app_config = {
@@ -14,11 +15,12 @@ app_config = {
 
 app = FastAPI(**app_config)
 
-app.state.limiter = rate_limiter
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def route_root():
     return RedirectResponse(url="/v1/docs")
 
 
 app.include_router(v1_router, prefix="/v1")
+
+

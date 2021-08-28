@@ -10,7 +10,8 @@ app_config = {
     "title": "GenshinAPI",
     "description": "Unofficial API for Genshin Impact",
     "version": "0.0.1",
-    "redoc_url": "/v1/docs",
+    "redoc_url": "/docs/redoc",
+    "docs_url": "/docs/swagger",
 }
 
 app = FastAPI(**app_config)
@@ -18,7 +19,7 @@ app = FastAPI(**app_config)
 
 @app.get("/", include_in_schema=False)
 async def route_root():
-    return RedirectResponse(url="/v1/docs")
+    return RedirectResponse(url="/docs/redoc")
 
 
 app.include_router(v1_router, prefix="/v1")

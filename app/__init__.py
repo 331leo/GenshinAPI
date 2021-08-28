@@ -22,5 +22,3 @@ async def route_root():
 
 
 app.include_router(v1_router, prefix="/v1")
-
-

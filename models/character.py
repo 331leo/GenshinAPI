@@ -2,6 +2,7 @@ from enum import Enum
 from typing import List
 
 from pydantic import BaseModel, Field, HttpUrl
+from pydantic.types import conint
 
 
 class CharacterElements(str, Enum):
@@ -10,7 +11,7 @@ class CharacterElements(str, Enum):
     Anemo = "Anemo"
     Electro = "Electro"
     Dendro = "Dendro"
-    Cyro = "Cyro"
+    Cyro = "Cryo"
     Geo = "Geo"
 
 
@@ -21,10 +22,9 @@ class ArtifactPosition(str, Enum):
     Goblet = "goblet"
     Crown = "crown"
 
-
 class CharacterWeapon(BaseModel):
     name: str = Field(description="Attached weapon (장착된 무기)", example="용의 포효")
-    rarity: int = Field(description="Weapon rarity (무기 희귀도)", example=4)
+    rarity: conint(ge=1, le=5) = Field(description="Weapon rarity (무기 희귀도)", example=4)
     type: str = Field(description="Weapon type (무기 종류)", example="한손검")
     level: int = Field(description="Weapon level (무기 레벨)", example=50)
     ascension: int = Field(description="Weapon ascension level (무기 돌파 레벨", example=2)
@@ -41,14 +41,16 @@ class CharacterWeapon(BaseModel):
 
 class CharacterArtifact(BaseModel):
     name: str = Field(description="Artifact Name (성유물 이름)", example="전쟁광의 장미")
-    pos: ArtifactPosition = Field(
+    pos_name: ArtifactPosition = Field(
         description="Artifact position (성유물 종류)", example=ArtifactPosition.Flower
     )
-
+    rarity: conint(ge=1, le=5) = Field(description="Artifact rarity (성유물 희귀도)", example=5)
+    level: int = Field(description="Artifact level (성유물 레벨)", example=6)
+    icon: str = Field(description="Artifact icon url (성유물 아이콘 URL)", example="https://upload-os-bbs.mihoyo.com/game_record/genshin/equip/UI_RelicIcon_10005_4.png")
 
 class Character(BaseModel):
     name: str = Field(description="Character Name (캐릭터 이름)", example="각청")
-    rarity: int = Field(description="Character rarity (캐릭터 희귀도)", example=5)
+    rarity: conint(ge=1, le=5) = Field(description="Character rarity (캐릭터 희귀도)", example=5)
     element: CharacterElements = Field(
         description="Character element (캐릭터 원소 특성)", example=CharacterElements.Electro
     )
@@ -56,7 +58,7 @@ class Character(BaseModel):
     friendship: int = Field(
         description="Character friendship level (캐릭터 호감도 레벨)", example=2
     )
-    constellation: str = Field(
+    constellation: int = Field(
         description="Character opened constellation (해금된 운명의 자리)", example=1
     )
     icon: str = Field(

@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Query, Request, status, Depends
+from typing import List
+
+from fastapi import APIRouter, Depends, Query, Request, status
 from genshinstats.errors import AccountNotFound, DataNotPublic, NotLoggedIn
 from starlette.responses import JSONResponse, Response
 
-from models import Stats, UIDErrorModel, Character, Lang
+from models import Character, Lang, Stats, UIDErrorModel
 from utils import get_user_stat
-from typing import List
 
 users_router = APIRouter(responses={"404": {"model": UIDErrorModel}})
 
@@ -36,6 +37,8 @@ async def route_user_stat(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"code": "NON_EXISTING", "message": "UID does not exist."},
         )
+
+
 @users_router.get(
     "/{uid}/characters",
     response_model=List[Character],
@@ -43,9 +46,5 @@ async def route_user_stat(
     description="Response language could be changed by _lang_ parameters",
     response_description="Returns a JSON object with the user's characters.",
 )
-async def route_user_characters(
-    request: Request,
-    uid: int,
-    lang: Lang = Lang.ko_kr
-):
+async def route_user_characters(request: Request, uid: int, lang: Lang = Lang.ko_kr):
     return JSONResponse(status_code=400, content={"message": "Not Implemented"})

@@ -1,9 +1,9 @@
-from models.exception import UIDExceptionHandler
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from genshinstats.errors import AccountNotFound, DataNotPublic, NotLoggedIn
 
+from models.exception import UIDExceptionHandler
 from routes.v1 import v1_router
 
 load_dotenv()

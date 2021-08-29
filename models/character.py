@@ -22,6 +22,7 @@ class ArtifactPosition(str, Enum):
     Goblet = "goblet"
     Crown = "crown"
 
+
 class CharacterWeapon(BaseModel):
     name: str = Field(description="Attached weapon (장착된 무기)", example="용의 포효")
     rarity: conint(ge=1, le=5) = Field(description="Weapon rarity (무기 희귀도)", example=4)
@@ -44,13 +45,21 @@ class CharacterArtifact(BaseModel):
     pos_name: ArtifactPosition = Field(
         description="Artifact position (성유물 종류)", example=ArtifactPosition.Flower
     )
-    rarity: conint(ge=1, le=5) = Field(description="Artifact rarity (성유물 희귀도)", example=5)
+    rarity: conint(ge=1, le=5) = Field(
+        description="Artifact rarity (성유물 희귀도)", example=5
+    )
     level: int = Field(description="Artifact level (성유물 레벨)", example=6)
-    icon: str = Field(description="Artifact icon url (성유물 아이콘 URL)", example="https://upload-os-bbs.mihoyo.com/game_record/genshin/equip/UI_RelicIcon_10005_4.png")
+    icon: str = Field(
+        description="Artifact icon url (성유물 아이콘 URL)",
+        example="https://upload-os-bbs.mihoyo.com/game_record/genshin/equip/UI_RelicIcon_10005_4.png",
+    )
+
 
 class Character(BaseModel):
     name: str = Field(description="Character Name (캐릭터 이름)", example="각청")
-    rarity: conint(ge=1, le=5) = Field(description="Character rarity (캐릭터 희귀도)", example=5)
+    rarity: conint(ge=1, le=5) = Field(
+        description="Character rarity (캐릭터 희귀도)", example=5
+    )
     element: CharacterElements = Field(
         description="Character element (캐릭터 원소 특성)", example=CharacterElements.Electro
     )

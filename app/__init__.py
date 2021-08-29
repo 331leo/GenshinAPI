@@ -1,6 +1,8 @@
+from models.exception import UIDExceptionHandler
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from genshinstats.errors import AccountNotFound, DataNotPublic, NotLoggedIn
 
 from routes.v1 import v1_router
 
@@ -11,8 +13,12 @@ Unofficial User API for Genshin Impact
 
 API for in-game user status, characters information, and more.
 
-[GitHub](https://github.com/331leo/GenshinAPI)
-[Swagger Docs](/docs/swagger)
+Only available for profile public users.
+
+__In Development__
+
+[GitHub](https://github.com/331leo/GenshinAPI)   
+[Swagger Docs](/docs/swagger)   
 [ReDoc Docs](/docs/redoc)
 """
 
@@ -33,3 +39,7 @@ async def route_root():
 
 
 app.include_router(v1_router, prefix="/v1")
+
+app.add_exception_handler(DataNotPublic, UIDExceptionHandler)
+app.add_exception_handler(AccountNotFound, UIDExceptionHandler)
+app.add_exception_handler(NotLoggedIn, UIDExceptionHandler)

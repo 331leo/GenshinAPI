@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Query, Request, status
+from fastapi import APIRouter, Query, Request, status, Depends
 from genshinstats.errors import AccountNotFound, DataNotPublic, NotLoggedIn
 from starlette.responses import JSONResponse, Response
 
-from models import Stats, UIDErrorModel
+from models import Stats, UIDErrorModel, Character, Lang
 from utils import get_user_stat
+from typing import List
 
 users_router = APIRouter(responses={"404": {"model": UIDErrorModel}})
 
@@ -16,7 +17,7 @@ users_router = APIRouter(responses={"404": {"model": UIDErrorModel}})
 )
 async def route_user_stat(
     request: Request,
-    uid: int = Query(None, description="In-Game User Id", example=838687127),
+    uid: int = Query(838687127, title="In-Game User Id", example=838687127),
 ):
     try:
         return await get_user_stat(uid)
@@ -35,3 +36,16 @@ async def route_user_stat(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"code": "NON_EXISTING", "message": "UID does not exist."},
         )
+@users_router.get(
+    "/{uid}/characters",
+    response_model=List[Character],
+    summary="Get all user's character info (_Not Implemented_)",
+    description="Response language could be changed by _lang_ parameters",
+    response_description="Returns a JSON object with the user's characters.",
+)
+async def route_user_characters(
+    request: Request,
+    uid: int,
+    lang: Lang = Lang.ko_kr
+):
+    return JSONResponse(status_code=400, content={"message": "Not Implemented"})
